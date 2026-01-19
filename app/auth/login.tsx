@@ -2,15 +2,15 @@ import { Layout } from "~/root";
 import type { Route } from "../+types/root";
 import { Form, redirect, Router, useFetcher, useNavigate } from "react-router";
 import Auth from "api/auth";
-import { useEffect, useState, type FormEvent } from "react";
+import { useContext, useEffect, useState, type FormEvent } from "react";
 import { IsLogin } from "api/func";
 import { URL_BACK } from "config";
 
-export async function loader() {
-  if (IsLogin()) {
-    throw redirect("/");
-  }
-}
+// export async function loader() {
+//   if (IsLogin()) {
+//     throw redirect("/");
+//   }
+// }
 
 interface LoginError {
   email?: string;

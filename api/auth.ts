@@ -5,11 +5,15 @@ interface AuthResponseToken {
 }
 export default class Auth {
   public static keyToken = "token";
+  public static keyName = "name"
 
-  public SetToken(token: string) {
+  public SetToken(token: string, name: string) {
     console.log("Token received: ", token);
     if (token) {
       localStorage.setItem(Auth.keyToken, token);
+    }
+    if (name) {
+      localStorage.setItem(Auth.keyName, name);
     }
   }
 
@@ -27,8 +31,9 @@ export default class Auth {
       },
     });
     let result = await response.json();
-    let token = result.token;
-    this.SetToken(token);
+    // let token = result.token;
+    // let name = result.name;
+    this.SetToken(result.token, result.name);
     return { data: result, code: response.status };
   }
 
