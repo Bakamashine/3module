@@ -1,50 +1,91 @@
-import React, {
-  Component,
-  useEffect,
-  useState,
-  type MouseEventHandler,
-} from "react";
+import React, { useState } from "react";
 
-const itemsColor = ["red", "blue", "yellow", "pink"];
+const itemsColor = ["red", "blue", "white" ];
 
-const Item = ({ styleName }: { styleName: string }) => (
-  <div className={`item ${styleName}`} />
+interface ItemData {
+  id: number;
+  color: string;
+  x: number;
+  y: number;
+}
+
+interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
+  color: string;
+}
+
+const Item = ({ color, ...props }: ItemProps) => (
+  <div className={`item ${color}`} {...props} />
 );
 
 export default function Drawing() {
-  const [mouseX, setMouseX] = useState(0);
-  const [mouseY, setMouseY] = useState(0);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<ItemData[]>([]);
+  const [dragId, setDragId] = useState<number | null>();
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-  const setMousePosition = (e: React.MouseEvent<HTMLDivElement>) => {
-    setMouseX(e.clientX);
-    setMouseY(e.clientY);
+  const clickItem = (id: number, e: React.MouseEvent<HTMLDivElement>) => {
+    if (id) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setDragId(id);
+      setOffset({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    }
   };
 
-  const clickItem = () => {};
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (dragId === null) return;
+    setItems((prev) =>
+      prev.map((item) =>
+        item.id === dragId
+          ? {
+              ...item,
+              x: e.clientX - offset.x,
+              y: e.clientY - offset.y,
+            }
+          : item,
+      ),
+    );
+  };
+
+  const onMouseUp = () => setDragId(null);
+
+  const clickContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
 
   const addItem = () => {
     const color = itemsColor[Math.floor(Math.random() * itemsColor.length)];
-    console.log("Color: ", color)
-    setItems((prev) => [...prev, <Item key={prev.length} styleName={color} />]);
+    console.log("Color item: ", color);
+    setItems((prev) => [...prev, { id: Date.now(), color, x: 0, y: 0 }]);
   };
 
-  useEffect(() => {
-    // setMousePosition()
-    console.log("MouseX: ", mouseX);
-    console.log("MouseY: ", mouseY);
-  }, [mouseX, mouseY]);
   return (
     <div>
       <div className="">
         <button onClick={addItem}>Add Item</button>
       </div>
-      <div className="box box-border mb-3 h1000" onMouseMove={setMousePosition}>
+      <div
+        className="h1000"
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseUp}
+        onContextMenu={clickContextMenu}
+      >
         {items && (
           <>
-            {items.map((item, index) => (
-            //   <Item key={index}  />
-            <React.Fragment key={index}>{item}</React.Fragment>
+            {items.map((item) => (
+              <Item
+                key={item.id}
+                color={item.color}
+                onClick={(e) => clickItem(item.id, e)}
+                style={{
+                  position: "absolute",
+                  left: item.x,
+                  top: item.y,
+                  cursor: "grab",
+                }}
+              />
             ))}
           </>
         )}

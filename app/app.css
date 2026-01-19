@@ -28,6 +28,7 @@ body {
 
 .box {
   padding: 5px;
+  position: relative;
 }
 
 .h1000 {
@@ -50,11 +51,19 @@ body {
   background-color: yellow;
 }
 
-.blue { 
+.blue {
   background-color: blue;
 }
 
+.white {
+  background-color: white;
+  border: 1px solid black;
+}
+
 .item {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100px;
   height: 100px;
 }
