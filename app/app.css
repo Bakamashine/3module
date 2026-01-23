@@ -61,9 +61,26 @@ body {
 }
 
 .item {
-  position: absolute;
+  /* position: absolute;
   top: 0;
   left: 0;
   width: 100px;
-  height: 100px;
+  height: 100px; */
+}
+
+.ContextMenu {
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+.ContextMenu__button {
+  border-bottom: 1px solid black;
+}
+
+.ContextMenu__button:first {
+  border: 5px 5px 0px 0px;
+}
+
+.ContextMenu__button:last-child {
+  border: 0px 0px 5px 5px;
 }
