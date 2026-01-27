@@ -5,31 +5,26 @@ import Auth from "api/auth";
 import { useContext, useEffect, useState, type FormEvent } from "react";
 import { IsLogin } from "api/func";
 import { URL_BACK } from "config";
-
-// export async function loader() {
-//   if (IsLogin()) {
-//     throw redirect("/");
-//   }
-// }
+import ShowError from "helper/showError";
 
 interface LoginError {
-  email?: string;
-  password?: string;
+  Name?: string;
+  // Password?: string;
 }
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginError>();
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const auth = new Auth();
-    const result = await auth.Login(email, password);
-    if (result && result.code != 422) {
+    const result = await auth.Login(name, password);
+    if (!result.error) {
       // throw redirect("/");
-      navigate("/");
+      // navigate("/");
     } else {
-      setErrors(result.data.errors);
+      setErrors({ Name: "User not found" });
     }
   };
 
@@ -38,11 +33,14 @@ export default function Login() {
       <div className="mb-3">
         <label>E-mail</label>
         <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
-        {errors && <p className="text-danger">{errors.email}</p>}
+        <div className="error">
+          <p className="text-danger">{errors?.Name}</p>
+        </div>
+        {/* {errors && <p className="text-danger">{errors.name}</p>} */}
       </div>
       <div className="mb-3">
         <label htmlFor="">Password</label>
@@ -51,7 +49,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
-        {errors && <p className="text-danger">{errors.password}</p>}
+        {/* {errors && <p className="text-danger">{errors.password}</p>} */}
       </div>
       <div className="mb-3">
         <button>Login</button>

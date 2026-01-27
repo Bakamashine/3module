@@ -5,42 +5,29 @@ import Auth from "api/auth";
 import { useEffect, useState, type FormEvent } from "react";
 import { IsLogin } from "api/func";
 import { URL_BACK } from "config";
-
-export async function loader() {
-  // if (IsLogin()) throw redirect("/");
-}
+import type AuthError from "interface/AuthError";
+import ShowError from "helper/showError";
 
 interface RegisterError {
-  email?: string;
   password?: string;
   name?: string;
 }
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [errors, setErrors] = useState<RegisterError>();
+  const [errors, setErrors] = useState<AuthError>();
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const auth = new Auth();
-    const result = await auth.Register(name, email, password);
-    if (result && result.code != 422) {
+    const result = await auth.Register(name, password);
+    if (!result?.error) {
       // throw redirect("/");
-      navigate("/");
+      // navigate("/");
     } else {
-      setErrors(result.data.errors);
+      setErrors(result.data);
     }
   };
-
-  //   useEffect(() => {
-  //     console.log("Errors: ", errors);
-  //   }, [errors]);
-
-  //   useEffect(() => {
-  //     console.log("Email: ", email);
-  //     console.log("Password: ", password);
-  //   }, [email, password]);
 
   return (
     <form method="post" onSubmit={submit}>
@@ -51,16 +38,7 @@ export default function Login() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        {errors && <p className="text-danger">{errors.name}</p>}
-      </div>
-      <div className="mb-3">
-        <label>E-mail</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {errors && <p className="text-danger">{errors.email}</p>}
+        <ShowError errors={errors?.errors.Name} />
       </div>
       <div className="mb-3">
         <label htmlFor="">Password</label>
@@ -69,7 +47,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
-        {errors && <p className="text-danger">{errors.password}</p>}
+        <ShowError errors={errors?.errors.Password} />
       </div>
       <div className="mb-3">
         <button>Register</button>
