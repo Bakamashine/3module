@@ -10,5 +10,6 @@ export default [
   route("about_us", "./about.tsx"),
   route("register", "auth/register.tsx"),
   route("login", "auth/login.tsx"),
-  route("drawing", "./drawing.tsx"),
+  // route("drawing", "./drawing.tsx"),
+  route("room/:id", './room.tsx')
 ] satisfies RouteConfig;

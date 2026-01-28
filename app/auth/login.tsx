@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <form method="post" onSubmit={submit}>
       <div className="mb-3">
-        <label>E-mail</label>
+        <label>Name</label>
         <input
           type="text"
           value={name}

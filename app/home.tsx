@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Room from "api/room";
 import * as IRoom from "interface/RoomInterface";
 import Reload from "components/Reload";
+import { Link } from "react-router";
 
 export default function Home() {
   const [room, setRoom] = React.useState<IRoom.default[]>();
@@ -34,7 +35,10 @@ export default function Home() {
           <ol>
             {room.map((item) => (
               <li key={item.id}>
-                <a href="#">{item.id}</a>
+                {/* <Link className="button" to={"/room"} */}
+                <Link className="button" to={`/room/${item.id}`}>
+                  {item.id}
+                </Link>
               </li>
             ))}
           </ol>

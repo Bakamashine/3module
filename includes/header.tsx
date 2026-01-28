@@ -17,9 +17,6 @@ export default function Header() {
       <Link to={"/"} className="text-blue-600 block">
         Home
       </Link>
-      <Link to={"drawing"} className="block">
-        Drawer
-      </Link>
       {username && (
         <div className="mb-3">
           <p>Добро пожаловать {username} </p>
