@@ -74,12 +74,14 @@ export default function Drawing() {
   };
   return (
     <div>
+    </div>
+    <div>
       <div className="">
         
         <button onClick={addItem}>Add Item</button>
       </div>
       <div
-        className="h1000"
+        {/* className="h1000" */}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseUp}
